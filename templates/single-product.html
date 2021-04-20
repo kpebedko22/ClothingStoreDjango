@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{singleItem.name}}{% endblock %}
+
+{% block content %}
+
+<!-- Breadcrumb -->
+<div class="container">
+    <nav>
+        <ol class="breadcrumb bg-transparent">
+            <li class="breadcrumb-item"><a href="{% url 'index' %}">Главная</a></li>
+            <li class="breadcrumb-item"><a href="{{ singleItem.PK_MainCategory.get_absolute_url }}">{{singleItem.PK_MainCategory.name}}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'catalog-sub-category' slug_MainCat=singleItem.PK_MainCategory.slug slug_SubCat=singleItem.PK_SubCategory.slug %}">{{singleItem.PK_SubCategory.name}}</a></li>
+            <li class="breadcrumb-item"><a href="{{ singleItem.PK_Category.get_absolute_url }}">{{singleItem.PK_Category.name}}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{singleItem.name}}</li>
+        </ol>
+    </nav>
+</div>
+<!-- End Breadcrumb -->
+
+<!-- Single Product -->
+<section class="single-product">
+    <div class="single-product__item">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="single-product__item-img">
+                        {% if singleItem.imagePath %}
+                        <img class="img-fluid" src="{{singleItem.imagePath.url}}" alt="{{singleItem.clothesName}}">
+                        {% else %}
+                        <img class="img-fluid" src="{% static 'img/empty.png' %}" alt="empty-image">
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="single-product__item-info">
+                        <div class="single-product__item-info-name">{{singleItem.name}}</div>
+                        <div class="single-product__item-info-price">{{singleItem.price}}&#8381;</div>
+
+                        <div class="single-product__item-info-details">
+                            <div class="single-product__item-info-details-label">
+                                <span class="single-product__item-info-details-label-text">Размер: </span>
+                            </div>
+                            <div class="single-product__item-info-details-size-value">{{singleItem.PK_Size.name}}</div>
+                        </div>
+                        <div class="single-product__item-info-details">
+                            <div class="single-product__item-info-details-label">
+                                <span class="single-product__item-info-details-label-text">Цвет: </span>
+                            </div>
+                            <div class="single-product__item-info-details-color-value">{{singleItem.PK_Color.name}}
+                            </div>
+                        </div>
+                    </div>
+                    <a href="{% url 'add-to-cart' item=singleItem.PK_Clothes %}"
+                        class="btn btn-block btn-outline-none single-product__item-btn-add-to-cart">
+                        <i class="fa fa-shopping-cart fa-fw"></i>
+                        <span>Добавить в корзину</span>
+                    </a>
+                    <div class="single-product__item-description">
+                        <h4>ОПИСАНИЕ</h4>
+                        <div class="single-product__item-description-text">
+                            {% autoescape on %}
+                            {{ singleItem.description | linebreaksbr }}
+                            {% endautoescape %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Single Product -->
+
+{% endblock %}

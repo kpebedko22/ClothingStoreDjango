@@ -1,0 +1,115 @@
+{% load static %}
+
+{% if not request.path == '/cart/' %}
+
+{% if not request.path == '/login/' %}
+
+{% if not request.path == '/registration/' %}
+
+<div class="static-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 ">
+                <div class="static-header__login">
+                    {% if user.is_authenticated %}
+                    <div class="static-header__user-authenticated float-right">
+
+                        <div class="static-header__user-authenticated-greating">
+                            Привет,
+                            <a class="static-header__login-link" href="{% url 'account' %}">
+                                {{ user.profile.name }}
+                            </a>
+                            !
+                        </div>
+                        <div class="static-header__user-authenticated-logout">
+                            <a href="{% url 'logout' %}" class="static-header__user-authenticated-logout-link btn-outline-none">
+                                <span>Добро пожаловать отсюда</span>
+                                <i class="fa fa-sign-out fa-fw"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    {% else %}
+                    <div class="static-header__user-not-authenticated">
+                        <a class="static-header__login-link" href="{% url 'login' %}">
+                            Войти
+                        </a>
+                        или
+                        <a class="static-header__login-link" href="{% url 'registration' %}">
+                            Зарегистрироваться
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+
+
+        <a class="navbar-brand" href="{% url 'index' %}">
+            <img src="{% static 'img/logo_new.png' %}" alt="store-logo">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mx-auto">
+                <!-- <li class="nav-item {% if request.path == '/' or request.path == '/index' %} active {% endif %}">
+                    <a class="nav-link" href="{% url 'index' %}">Главная</a>
+                </li> -->
+
+                {% for mc in categories %}
+                <li class="nav-item dropdown {% if mc.MainCategory.slug in request.path %} active {% endif %}">
+                    <a class="nav-link " href="" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                        {{ mc.MainCategory.name }}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="{{ mc.MainCategory.get_absolute_url }}"> Все товары </a>
+                        {% for sc in mc.SubCategories %}
+                        <hr class="navbar-hr">
+                        <a class="dropdown-item"
+                            href="{% url 'catalog-sub-category' slug_MainCat=mc.MainCategory.slug slug_SubCat=sc.SubCategory.slug %}">
+                            {{ sc.SubCategory.name }}</a>
+                        <hr class="navbar-hr">
+                        {% for c in sc.Categories %}
+                        <a class="dropdown-item dropdown-item-category" href="{{ c.get_absolute_url }}">{{ c.name }}</a>
+                        {% endfor %}
+                        {% endfor %}
+                    </div>
+                </li>
+
+
+                <!-- <li class="nav-item {% if request.path == '/catalog/' %} active {% endif %}">
+                    <a class="nav-link" href="{{ mainCategory.get_absolute_url }}">{{ mainCategory.name }}</a>
+                </li> -->
+                {% endfor %}
+                {% if user.is_superuser %}
+                <li class="nav-item {% if request.path == '/products-administration/' %} active {% endif %}">
+                    <a class="nav-link" href="{% url 'products-administration' %}">Администрирование товаров</a>
+                </li>
+                {% endif %}
+            </ul>
+            <div class="nav-shopping-bag">
+                <a class="nav-link" href="{% url 'cart' %}">
+                    <i class="fa fa-shopping-cart fa-fw"></i>
+                    <span class="hover">Корзина (</span>
+                    <span class="nav-shopping-bag__num-items">{{ cart.totalItems }}</span>
+                    <span class="hover">)</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+<!-- End Navbar -->
+
+{% endif %}
+{% endif %}
+{% endif %}

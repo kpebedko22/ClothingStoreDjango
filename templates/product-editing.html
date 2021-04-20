@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+{% if PK %}
+Редактирование товара
+{% else %}
+Добавление товара
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<!-- Breadcrumb -->
+<div class="container">
+    <nav>
+        <ol class="breadcrumb bg-transparent">
+            <li class="breadcrumb-item"><a
+                    href="http://127.0.0.1:8000{% url 'products-administration' %}">Администрирование товаров</a></li>
+            <li class="breadcrumb-item active" aria-current="page">
+                {% if PK %}
+                Редактирование товара:
+                {% else %}
+                Добавление товара:
+                {% endif %}
+            </li>
+        </ol>
+    </nav>
+</div>
+<!-- End Breadcrumb -->
+
+<!-- Product Editing -->
+<section class="product-editing">
+    <div class="container">
+        <div class="row mb-3">
+            <div class="col">
+                {% if PK %}
+                <h3>Редактирование товара:</h3>
+                {% else %}
+                <h3>Добавление товара:</h3>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col col-12 col-lg-6 ">
+
+
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <!-- {{ form }} -->
+
+                    {% for field in form.visible_fields %}
+
+                    <span class="product-editing__edit-field">
+                        {% if field.label %} {{field.label_tag}} {% endif %}
+                        {{field}}
+                    </span>
+
+                    {% endfor %}
+
+
+                    <span class="product-editing__edit-field">
+                        <button type="submit" class="btn btn-block btn-outline-none ">
+                            <i class="fa fa-save fa-fw"></i>
+                            <span>
+                                {% if PK %}
+                                Сохранить
+                                {% else %}
+                                Добавить
+                                {% endif %}
+                            </span>
+                        </button>
+                    </span>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Product Editing -->
+
+{% endblock %}

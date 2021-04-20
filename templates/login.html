@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ titlePage }}{% endblock %}
+{% block content %}
+
+
+<!-- Cart Header -->
+<div class="container pt-5">
+    <div class="row cart mb-3">
+        <div class="col text-center">
+            <h3>{{ titlePage }}</h3>
+            <p>Будьте внимательны с вводом данных, не ошибитесь!</p>
+        </div>
+    </div>
+</div>
+<!-- End Cart Header -->
+
+<!-- Breadcrumb -->
+<div class="container">
+    <nav>
+        <ol class="breadcrumb bg-transparent">
+            <li class="breadcrumb-item"><a href="http://127.0.0.1:8000{% url 'index' %}">Главная</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ titlePage }}</li>
+        </ol>
+    </nav>
+</div>
+<!-- End Breadcrumb -->
+
+<section class="authentication">
+    <div class="container">
+        <div class="d-flex justify-content-center">
+            <h3>{{ error }}</h3>
+            <form method="POST">
+                {% csrf_token %}
+
+                {% for field in form.visible_fields %}
+                <p class="checkout__contacts-field">
+                    {% if field.label %} {{field.label_tag}} {% endif %}
+                    {{field}}
+                </p>
+                {% endfor %}
+
+                <span>
+                    <button type="submit" class="btn btn-block btn-outline-none btn-login">
+                        <span>{{ titleButton }}</span>
+                        <i class="fa fa-sign-in fa-fw"></i>
+                    </button>
+                </span>
+            </form>
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}

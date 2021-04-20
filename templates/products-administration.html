@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Администрирование товаров{% endblock %}
+{% block content %}
+
+<!-- Catalog -->
+<section class="catalog-admin bg-light py-5">
+    <div class="container">
+        <div class="row mb-3">
+            <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+                <a href="{% url 'add-to-db' %}" class="btn btn-block btn-outline-none btn-add-new-item">
+                    <i class="fa fa-check fa-fw"></i>
+                    <span>Добавить</span>
+                </a>
+            </div>
+        </div>
+        <div class="row">
+
+            {% for item in clothes %}
+            <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+                <div class="catalog__item">
+                    <a href="{{ item.get_absolute_url }}">
+                        {% if item.imagePath %}
+                        <img src="{{item.imagePath.url}}" class="catalog__item-img" alt="{{ item.name }}">
+                        {% else %}
+                        <img src="{% static 'img/empty.png' %}" class="catalog__item-img" alt="empty-image">
+                        {% endif %}
+                    </a>
+                    <a href="{{ item.get_absolute_url }}">
+                        <div class="catalog__item-info">
+                            <div class="catalog__item-info-name">{{ item.name }}</div>
+                            <div class="catalog__item-info-price">{{ item.price }}&#8381;</div>
+                        </div>
+                    </a>
+                    <div class="col">
+                        <a href="{% url 'edit-in-db' item=item.PK_Clothes %}" class="btn btn-block btn-outline-none btn-edit-item">
+                            <i class="fa fa-pencil fa-fw"></i>
+                            <span>Изменить</span>
+                        </a>
+                        <a href="{% url 'delete-from-db' item=item.PK_Clothes %}" class="btn btn-block btn-outline-none btn-del-item">
+                            <i class="fa fa-trash-o fa-fw"></i>
+                            <span>Удалить</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</section>
+<!-- End Catalog -->
+{% endblock %}

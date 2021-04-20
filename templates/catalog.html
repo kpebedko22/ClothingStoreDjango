@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ category_title }}{% endblock %}
+{% block content %}
+
+<!-- Breadcrumb -->
+<div class="container">
+    <nav>
+        <ol class="breadcrumb bg-transparent">
+            <li class="breadcrumb-item"><a href="{% url 'index' %}">Главная</a></li>
+            {% if breadcrumbs.MainCategory %}
+            {% if breadcrumbs.SubCategory %}
+            <li class="breadcrumb-item"><a
+                    href="{{ breadcrumbs.MainCategory.get_absolute_url }}">{{breadcrumbs.MainCategory.name}}</a>
+            </li>
+            {% else %}
+            <li class="breadcrumb-item active" aria-current="page">{{breadcrumbs.MainCategory.name}}</li>
+            {% endif %}
+            {% endif %}
+            {% if breadcrumbs.SubCategory %}
+            {% if breadcrumbs.Category %}
+            <li class="breadcrumb-item"><a
+                    href="{% url 'catalog-sub-category' slug_MainCat=breadcrumbs.MainCategory.slug slug_SubCat=breadcrumbs.SubCategory.slug %}">{{breadcrumbs.SubCategory.name}}</a>
+            </li>
+            {% else %}
+            <li class="breadcrumb-item active" aria-current="page">{{breadcrumbs.SubCategory.name}}</li>
+            {% endif %}
+            {% endif %}
+            {% if breadcrumbs.Category %}
+            <li class="breadcrumb-item active" aria-current="page">{{breadcrumbs.Category.name}}</li>
+            {% endif %}
+        </ol>
+    </nav>
+</div>
+<!-- End Breadcrumb -->
+
+<!-- Catalog -->
+<section class="catalog bg-light py-5">
+    <div class="container">
+        <div class="row mb-3">
+            <div class="col">
+                <h3>{{ category_title }}</h3>
+            </div>
+        </div>
+
+        <div class="catalog-filters__container">
+            <div class="row">
+                <div class="catalog-filters__container-filter">
+                    <div class="catalog-filters__container-filter-label">Размер:</div>
+                    <select class="selectpicker  btn-outline-none" title="" multiple name="" id="filter_size">
+                        {% for size in sizes %}
+                        <option class="filter-option" value="{{ size.PK_Size }}">{{ size.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="catalog-filters__container-filter">
+                    <div class="catalog-filters__container-filter-label">Цвет:</div>
+                    <select class="selectpicker btn-outline-none" title="" multiple name="" id="filter_color">
+                        {% for color in colors %}
+                        <option class="filter-option" value="{{ color.PK_Color }}">{{ color.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class=" catalog-filters__container-filter">
+                    <div class="catalog-filters__container-filter-label">Сортировать:</div>
+                    <select class="selectpicker btn-outline-none" title="" name="" id="filter_sort">
+                        <option class="filter-option" value="default_none"></option>
+                        <option class="filter-option" value="ascending_price">по возрастанию цены</option>
+                        <option class="filter-option" value="descending_price">по убыванию цены</option>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row" id="clothes_container">
+
+            {% if not clothes %}
+            <div class="msg-filter__container">
+                <div class="msg-filter__label">Ничего не найдено по Вашему запросу &#128549;</div>
+                <div class="msg-filter__text">
+                    Попробуйте изменить параметры фильтрации, или посмотрите товары из другой категории
+                </div>
+            </div>
+            {% endif %}
+
+            {% for item in clothes %}
+
+            <div class="col-6 col-sm-6 col-md-6 col-lg-3">
+                <div class="catalog__item">
+                    <a href="{{ item.get_absolute_url }}">
+                        {% if item.imagePath %}
+                        <img src="{{item.imagePath.url}}" class="catalog__item-img" alt="{{ item.clothesName }}">
+                        {% else %}
+                        <img src="{% static 'img/empty.png' %}" class="catalog__item-img" alt="empty-image">
+                        {% endif %}
+                    </a>
+                    <a href="{{ item.get_absolute_url }}">
+                        <div class="catalog__item-info">
+                            <div class="catalog__item-info-name">{{ item.name }}</div>
+                            <div class="catalog__item-info-price">{{ item.price }}&#8381;</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</section>
+<!-- End Catalog -->
+
+{% endblock %}

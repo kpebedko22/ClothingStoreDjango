@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Личный кабинет{% endblock %}
+{% block content %}
+
+<!-- Breadcrumb -->
+<div class="container">
+    <nav>
+        <ol class="breadcrumb bg-transparent">
+            <li class="breadcrumb-item"><a href="{% url 'index' %}">Главная</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Личный кабинет</li>
+        </ol>
+    </nav>
+</div>
+<!-- End Breadcrumb -->
+
+<!-- Account -->
+<section class="account bg-light py-5">
+    <div class="container">
+
+        <div class="row mb-3">
+            <div class="col">
+                <h3>Личный кабинет</h3>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="account-menu__items">
+                    <a href="{%url 'account'%}" class="account-menu__item account-menu__item-active">Мои заказы</a>
+                    <a href="{%url 'account-data'%}" class="account-menu__item">Мои данные</a>
+                </div>
+            </div>
+
+            <div class="col-lg-9">
+                <div class="account-orders">
+                    {% if orders %}
+                    <div class="account-orders__orders-list">
+                        {% for order in orders %}
+                        <div class="account-orders__order">
+                            <a class="btn-outline-none account-orders__order-title" data-toggle="collapse"
+                                href="#collapse + {{ order.PK_Order }}" role="button" aria-expanded="false"
+                                aria-controls="collapseExample">
+                                Заказ от {{ order.date }}. Кол-во товаров: {{ order.PK_Cart.totalItems }}. Общая сумма:
+                                {{ order.PK_Cart.totalPrice }}
+                            </a>
+                            <div class="account-orders__order-info collapse" id="collapse + {{ order.PK_Order }}">
+                                {% for cartItem in order.PK_Cart.items.all %}
+                                <hr>
+                                <div class="account-orders__order-info-item">
+                                    <div class="row">
+                                        <div class="col-4 col-sm-3 col-md-3 ">
+                                            {% if cartItem.imagePath %}
+                                            <img src="{{cartItem.imagePath.url}}" class="img-fluid"
+                                                alt="{{ cartItem.name }}">
+                                            {% else %}
+                                            <img src="{% static 'img/empty.png' %}" class="img-fluid" alt="empty-image">
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-8 col-sm-9 col-md-9 mt-1">
+                                            <div class="checkout__item-header">
+                                                <div class="checkout__item-header-name">
+                                                    {{ cartItem.name }}</div>
+                                            </div>
+                                            <div class="checkout__item-details">
+                                                <div class="checkout__item-details-label">
+                                                    <span class="checkout__item-details-label-text">Размер: </span>
+                                                </div>
+                                                <div class="checkout__item-details-size-value">
+                                                    {{ cartItem.PK_Size.name }}</div>
+                                            </div>
+                                            <div class="checkout__item-details">
+                                                <div class="checkout__item-details-label">
+                                                    <span class="checkout__item-details-label-text">Цвет: </span>
+                                                </div>
+                                                <div class="checkout__item-details-color-value">
+                                                    {{ cartItem.PK_Color.name }}</div>
+                                            </div>
+                                            <div class="checkout__item-details">
+                                                <div class="checkout__item-details-label">
+                                                    <span class="checkout__item-details-label-text">Цена: </span>
+                                                </div>
+                                                <div class="checkout__item-details-price-value">
+                                                    {{ cartItem.price }}&#8381;</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                    </div>
+
+
+
+                    {% else %}
+
+                    <div class="account-orders__no-orders">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-7 col-lg-8">
+
+                                <div class="account-orders__no-orders-title">Вы ещё не сделали ни одного заказа</div>
+                                <div class="account-orders__no-orders-text">
+                                    Здесь могла бы быть какая-то информация, но нет... можете отправиться за покупками,
+                                    нажав на кнопку ниже...
+                                </div>
+                                <div class="account-orders__no-orders-text">
+                                    А еще можете посмотреть на информацию справа - там всего лишь инструкция по
+                                    использованию
+                                    интернет-магазина... но прочитайте ее, пожалуйста, а то зря что ли она сделана...
+                                </div>
+                                <a href="/" class="account-orders__no-orders-btn btn btn-block btn-outline-none">
+                                    Перейти к покупкам
+                                </a>
+                            </div>
+
+                            <div class="d-none d-md-block col-md-5 col-lg-4">
+                                <div class="account-orders-steps__title">Сделать заказ просто:</div>
+                                <ul class="account-orders-steps__list">
+                                    <li class="account-orders-steps__list-item">
+                                        <i class="fa fa-search fa-2x"></i>
+                                        <span class="account-orders-steps__list-item-text">Выберите товар</span>
+                                    </li>
+                                    <li class="account-orders-steps__list-item">
+                                        <i class="fa fa-shopping-cart fa-2x"></i>
+                                        <span class="account-orders-steps__list-item-text">Положите его в корзину</span>
+                                    </li>
+                                    <li class="account-orders-steps__list-item">
+                                        <i class="fa fa-pencil fa-2x"></i>
+                                        <span class="account-orders-steps__list-item-text">Заполните короткую
+                                            форму</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Account -->
+
+{% endblock %}

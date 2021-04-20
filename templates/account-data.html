@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Личный кабинет{% endblock %}
+{% block content %}
+
+<!-- Breadcrumb -->
+<div class="container">
+    <nav>
+        <ol class="breadcrumb bg-transparent">
+            <li class="breadcrumb-item"><a href="{% url 'index' %}">Главная</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Личный кабинет</li>
+        </ol>
+    </nav>
+</div>
+<!-- End Breadcrumb -->
+
+<!-- Account Data -->
+<section class="account bg-light py-5">
+    <div class="container">
+
+        <div class="row mb-3">
+            <div class="col">
+                <h3>Личный кабинет</h3>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="account-menu__items">
+                    <a href="{%url 'account'%}" class="account-menu__item">Мои заказы</a>
+                    <a href="{%url 'account-data'%}" class="account-menu__item account-menu__item-active">Мои данные</a>
+                </div>
+            </div>
+
+            <div class="col-lg-9">
+                <div class="account-data">
+                    <div class="account-data__container">
+
+                        <div class="row">
+                            <div class="col-12 account-data__container-form">
+                                <form method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+
+                                    {% for field in form.visible_fields %}
+                                    <span class="account-data__form-field">
+                                        {% if field.label %} {{field.label_tag}} {% endif %}
+                                        {{field}}
+                                    </span>
+                                    {% endfor %}
+
+                                    <span>
+                                        <button type="submit"
+                                            class="btn btn-block btn-outline-none btn-account-data-save">
+                                            <i class="fa fa-check fa-fw"></i>
+                                            <span>Сохранить</span>
+                                        </button>
+                                    </span>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Account -->
+
+{% endblock %}
